@@ -9,11 +9,32 @@ const readdirp = require('readdirp')
 const esprima = require('esprima')
 const estraverse = require('estraverse')
 
+/**
+ * Return a deduped list via the set object
+ * @todo when v8 implements the spread operator, use [...new Set(arr)] to return
+ * an array instead
+ *
+ * @method dedupe
+ * @param {array} arr an array
+ * @returns {set} a unique set of items
+ */
 function dedupe (arr) {
   return new Set(arr)
 }
 
+/**
+ * Create a new DeadPackageFinder
+ * @class DeadPackageFinder
+ */
 class DeadPackageFinder {
+  /**
+   * Creeate a new DeadPackageFinder
+   * @method constructor
+   * @param {array} [ignoreList] An array of directories to ignore
+   * @param {boolean} [ignoreDevDeps=false] Should we ignore development depenndencies
+   * @param {string} [projectRoot=process.cwd()] Where to find package.json
+   * @returns {DeadPackageFinder} A new instance of dead package finder
+   */
   constructor (ignoreList, ignoreDevDeps, projectRoot) {
     this.emitter = new events.EventEmitter()
     ignoreList = ignoreList || []
@@ -31,17 +52,29 @@ class DeadPackageFinder {
       })
   }
 
+  /**
+   * Run the finder
+   *
+   * Emits the following events:
+   *  * error: obj -> a fatal error has occured and processing will cease
+   *  * warning: string -> something non-fatal has occurred but the operator should know
+   *  * verbose: ...mixed -> a lot of data that is unnecessary except for debugging
+   *  * end: array -> a list of package in your json file not used in your software
+   *
+   * @method run
+   * @returns {EventEmitter} event emitter
+   */
   run () {
     const self = this
     this.deps = []
     this.devDevs = []
 
-    this.readPackageJSON()
+    this._readPackageJSON()
       .then(function () {
-        return self.buildRequireList()
+        return self._buildRequireList()
       })
       .then(function (modList) {
-        return self.filterLists(modList)
+        return self._filterLists(modList)
       })
       .catch(function (err) {
         self.emitter('error', err)
@@ -50,7 +83,7 @@ class DeadPackageFinder {
     return this.emitter
   }
 
-  readPackageJSON () {
+  _readPackageJSON () {
     const self = this
     const pack = path.join(this.projectRoot, 'package.json')
     return new Promise(function (resolve) {
@@ -75,7 +108,7 @@ class DeadPackageFinder {
     })
   }
 
-  buildRequireList () {
+  _buildRequireList () {
     var self = this
 
     return new Promise(function (resolve) {
@@ -118,7 +151,7 @@ class DeadPackageFinder {
     })
   }
 
-  filterLists (modules) {
+  _filterLists (modules) {
     const unused = []
     this.deps.forEach(function (dep) {
       if (!modules.has(dep)) {

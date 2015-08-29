@@ -4,7 +4,8 @@
   "description": "Find all modules listed in package.json that aren't actually used by your code",
   "main": "dead-package-finder.js",
   "scripts": {
-    "test": "tap test/*.spec.js"
+    "lint": "standard dead-package-finder.js dead-package-finder.cli.js test/dead-package-finder.spec.js",
+    "test": "npm run lint && tap test/*.spec.js"
   },
   "bin": "dead-package-finder.cli.js",
   "repository": {
