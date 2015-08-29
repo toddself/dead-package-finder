@@ -77,7 +77,6 @@ class DeadPackageFinder {
         return self._filterLists(modList)
       })
       .catch(function (err) {
-        console.log('hi emitting error now')
         self.emitter.emit('error', err)
       })
 
