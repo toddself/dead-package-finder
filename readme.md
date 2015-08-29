@@ -10,6 +10,10 @@ This tool is for you!
 
 This walks all the javascript files in a specified directory and uses esprima to find all the `require` statements in them and matches them up against the packages you've declared a dependency on. If you have a declared dependency that you're not requiring, it'll tell you that so you can take the appropriate action.
 
+## iojs only!
+
+This uses a bunch of ES6 features and so will only work in io.js v2.0.0 and higher. But you're like using the latest version, right?
+
 ## Usage
 
 ```bash
