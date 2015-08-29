@@ -1,10 +1,11 @@
-var test1 = require('fs')
-var test2 = require(path.join('test', 'fs'))
-var test3 = require('./path')
-var test4 = require('/path')
-require('fs')
-require(path.join('test', 'fs'))
-require('./path')
-require('/path')
-var test6 = require('fs'),
-    test7 = require('fs')
+#!/lets/test/stripping/this
+var test1 = require('normal-require')
+var test2 = require(path.join('test', 'function-call-require'))
+var test3 = require('./dot-slash-require')
+var test4 = require('/absolute-require')
+require('global-require')
+require(path.join('test', 'function-call-global'))
+require('./dot-slash-global')
+require('/absolute-global')
+var test6 = require('compound1'),
+    test7 = require('compound2')

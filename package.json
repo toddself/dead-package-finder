@@ -6,6 +6,7 @@
   "scripts": {
     "test": "tap test/*.spec.js"
   },
+  "bin": "dead-package-finder.cli.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/toddself/dead-package-finder.git"
@@ -25,12 +26,10 @@
   },
   "homepage": "https://github.com/toddself/dead-package-finder#readme",
   "dependencies": {
-    "builtin-modules": "~1.0.1",
     "esprima": "~2.5.0",
     "estraverse": "~4.1.0",
-    "graceful-fs": "~4.1.2",
-    "jsondom": "~0.4.1",
-    "lodash.difference": "~3.2.2",
+    "minimist": "~1.2.0",
+    "npmlog": "~1.2.1",
     "readdirp": "~2.0.0"
   },
   "engines": {

@@ -1,0 +1,12 @@
+Usage:
+    dead-package-finder [options]
+
+Options:
+    -h, --help                     print usage information
+    -v, --version                  show version info and exit
+    -i, --ignore-folder            a list of folders to ignore. node_modules 
+                                   will ALWAYS be ignored
+    -r, --project-root             the path to the directory containing the 
+                                   package.json file
+    -d, --ignore-dev-dependencies  ignore any packages listed in devDependencies
+    --verbose                      print out way too much info to even be useful

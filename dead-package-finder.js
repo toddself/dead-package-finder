@@ -21,6 +21,7 @@ class DeadPackageFinder {
     if (!Array.isArray(ignoreList)) {
       throw new Error(`ignoreList must be an array ${ignoreList}`)
     }
+
     this.projectRoot = projectRoot || process.cwd()
     this.ignoreDevDeps = ignoreDevDeps || false
     this.ignoreList = ignoreList
@@ -79,9 +80,9 @@ class DeadPackageFinder {
 
     return new Promise(function (resolve) {
       let modules = []
+      let _walkerDone = false
       let _count = 0
       let _current = 0
-      let doneCalled = false
 
       const opts = {
         root: self.projectRoot,
@@ -90,8 +91,7 @@ class DeadPackageFinder {
       }
 
       function done () {
-        ++_current
-        if (_current === _count && doneCalled) {
+        if (_current === _count && _walkerDone) {
           const mods = dedupe(modules)
           self.emitter.emit('verbose', `found the following requires`, mods)
           resolve(mods)
@@ -107,11 +107,12 @@ class DeadPackageFinder {
           self.emitter.emit('verbose', `processing ${entry.fullPath}`)
           self._processEntry(entry.fullPath).then(function (requires) {
             modules = modules.concat(requires)
+            ++_current
             done()
           })
         })
         .on('end', function () {
-          doneCalled = true
+          _walkerDone = true
           done()
         })
     })
@@ -120,14 +121,14 @@ class DeadPackageFinder {
   filterLists (modules) {
     const unused = []
     this.deps.forEach(function (dep) {
-      if (modules.has(dep)) {
+      if (!modules.has(dep)) {
         unused.push(dep)
       }
     })
 
     if (!this.ignoreDevDeps) {
-      this.devDevs.forEach(function (dep) {
-        if (modules.has(dep)) {
+      this.devDeps.forEach(function (dep) {
+        if (!modules.has(dep)) {
           unused.push(dep)
         }
       })
@@ -137,13 +138,24 @@ class DeadPackageFinder {
   }
 
   _processEntry (file) {
+    const self = this
     return new Promise(function (resolve, reject) {
       fs.readFile(file, 'utf8', function (err, data) {
         if (err) {
           throw err
         }
 
-        const tree = esprima.parse(data)
+        // if a script has a #! starting is esprima will choke so cli scripts
+        // are gonna cause issues
+        data = data.replace(/^#!.*\n?/, '')
+
+        let tree
+        try {
+          tree = esprima.parse(data)
+        } catch (err) {
+          self.emitter.emit('warning', `unable to parse ${file}: ${err.message}`)
+        }
+
         const modules = []
         estraverse.traverse(tree, {
           enter: function (node, parent) {
