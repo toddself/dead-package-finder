@@ -1,0 +1,10 @@
+var test1 = require('fs')
+var test2 = require(path.join('test', 'fs'))
+var test3 = require('./path')
+var test4 = require('/path')
+require('fs')
+require(path.join('test', 'fs'))
+require('./path')
+require('/path')
+var test6 = require('fs'),
+    test7 = require('fs')

@@ -1,0 +1,44 @@
+{
+  "name": "dead-package-finder",
+  "version": "1.0.0",
+  "description": "Find all modules listed in package.json that aren't actually used by your code",
+  "main": "dead-package-finder.js",
+  "scripts": {
+    "test": "tap test/*.spec.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/toddself/dead-package-finder.git"
+  },
+  "keywords": [
+    "package.json",
+    "package",
+    "not",
+    "used",
+    "extra",
+    "extraneous"
+  ],
+  "author": "Todd Kennedy <todd@selfassembled.org>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/toddself/dead-package-finder/issues"
+  },
+  "homepage": "https://github.com/toddself/dead-package-finder#readme",
+  "dependencies": {
+    "builtin-modules": "~1.0.1",
+    "esprima": "~2.5.0",
+    "estraverse": "~4.1.0",
+    "graceful-fs": "~4.1.2",
+    "jsondom": "~0.4.1",
+    "lodash.difference": "~3.2.2",
+    "readdirp": "~2.0.0"
+  },
+  "engines": {
+    "node": ">=0.12.0",
+    "iojs": ">1.0.0"
+  },
+  "devDependencies": {
+    "standard": "~5.1.1",
+    "tap": "~1.3.3"
+  }
+}
