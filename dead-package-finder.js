@@ -184,7 +184,7 @@ class DeadPackageFinder {
 
         let tree
         try {
-          tree = esprima.parse(data)
+          tree = esprima.parse(data, {sourceType: 'module'})
         } catch (err) {
           self.emitter.emit('warning', `unable to parse ${file}: ${err.message}`)
         }
@@ -192,13 +192,20 @@ class DeadPackageFinder {
         const modules = []
         estraverse.traverse(tree, {
           enter: function (node, parent) {
+            let source = ''
             if (node.type === 'Identifier' && node.name === 'require') {
               if (Array.isArray(parent.arguments)) {
                 const arg = parent.arguments[0]
-                if (arg.type === 'Literal' && !/^[./]/.test(arg.value)) {
-                  modules.push(arg.value)
+                if (arg.type === 'Literal') {
+                  source = arg.value
                 }
               }
+            } else if (node.type === 'ImportDeclaration') {
+              source = node.source.value
+            }
+
+            if (source && !/^[./]/.test(source)) {
+              modules.push(source)
             }
           }
         })

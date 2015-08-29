@@ -9,3 +9,5 @@ require('./dot-slash-global')
 require('/absolute-global')
 var test6 = require('compound1'),
     test7 = require('compound2')
+
+import thisModule from 'myModule'

@@ -7,7 +7,7 @@ const test = require('tap').test
 const DPF = require('../dead-package-finder')
 const testPackage = require('./fake-project/package')
 const testPackageModules = Object.keys(testPackage.dependencies).concat(Object.keys(testPackage.devDependencies))
-const programPackages = ['normal-require', 'global-require', 'compound1', 'compound2']
+const programPackages = ['normal-require', 'global-require', 'compound1', 'compound2', 'myModule']
 const deadPackagesFixture = ['builtin-modules',
   'esprima',
   'estraverse',
