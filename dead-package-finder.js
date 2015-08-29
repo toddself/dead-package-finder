@@ -77,7 +77,8 @@ class DeadPackageFinder {
         return self._filterLists(modList)
       })
       .catch(function (err) {
-        self.emitter('error', err)
+        console.log('hi emitting error now')
+        self.emitter.emit('error', err)
       })
 
     return this.emitter
@@ -86,10 +87,10 @@ class DeadPackageFinder {
   _readPackageJSON () {
     const self = this
     const pack = path.join(this.projectRoot, 'package.json')
-    return new Promise(function (resolve) {
+    return new Promise(function (resolve, reject) {
       fs.readFile(pack, 'utf8', function (err, data) {
         if (err) {
-          throw err
+          return reject(err)
         }
 
         data = JSON.parse(data)
@@ -132,9 +133,6 @@ class DeadPackageFinder {
       }
 
       readdirp(opts)
-        .on('warn', function (err) {
-          self.emitter('warning', err)
-        })
         .on('data', function (entry) {
           ++_count
           self.emitter.emit('verbose', `processing ${entry.fullPath}`)
@@ -175,7 +173,7 @@ class DeadPackageFinder {
     return new Promise(function (resolve, reject) {
       fs.readFile(file, 'utf8', function (err, data) {
         if (err) {
-          throw err
+          return reject(err)
         }
 
         // if a script has a #! starting is esprima will choke so cli scripts

@@ -68,3 +68,28 @@ test('it ignores dev packages', function (t) {
       t.end()
     })
 })
+
+test('bad args', function (t) {
+  t.throws(function () {
+    const d = new DPF('ignore me')
+    d.run()
+  }, 'need an array')
+  t.end()
+})
+
+test('file missing during read op', function (t) {
+  const d = new DPF()
+  d._processEntry('enoent-file.js').catch(function (err) {
+    t.equal(err.code, 'ENOENT', 'got an enoent')
+    t.end()
+  })
+})
+
+test('missing package.json at project root', function (t) {
+  const d = new DPF([], true, '/tmp/hi')
+  d.run()
+  .on('error', function (err) {
+    t.equal(err.code, 'ENOENT', 'got an enoent')
+    t.end()
+  })
+})
