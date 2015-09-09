@@ -33,9 +33,7 @@ test('it finds unused packages', function (t) {
       }
 
       if (/^found/.test(args[0])) {
-        programPackages.forEach(function (pack) {
-          t.ok(args[1].has(pack), `has package ${pack}`)
-        })
+        t.deepEqual(programPackages.sort(), args[1].sort(), 'found all the packages')
       }
     })
     .on('end', function (deadPackages) {
@@ -58,9 +56,7 @@ test('it ignores dev packages', function (t) {
       }
 
       if (/^found/.test(args[0])) {
-        programPackages.forEach(function (pack) {
-          t.ok(args[1].has(pack), `has package ${pack}`)
-        })
+        t.deepEqual(programPackages.sort(), args[1].sort(), 'found all the packages')
       }
     })
     .on('end', function (deadPackages) {

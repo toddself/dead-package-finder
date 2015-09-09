@@ -5,7 +5,8 @@
   "main": "dead-package-finder.js",
   "scripts": {
     "lint": "standard dead-package-finder.js dead-package-finder.cli.js test/dead-package-finder.spec.js",
-    "test": "npm run lint && tap test/*.spec.js"
+    "test": "npm run lint && tap test/*.spec.js",
+    "coverage": "tap test/*.spec.js --cov"
   },
   "bin": "dead-package-finder.cli.js",
   "repository": {
@@ -34,7 +35,7 @@
     "readdirp": "~2.0.0"
   },
   "engines": {
-    "iojs": ">2.0.0"
+    "node": ">=4.0.0"
   },
   "devDependencies": {
     "standard": "~5.1.1",

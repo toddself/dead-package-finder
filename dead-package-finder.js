@@ -126,7 +126,7 @@ class DeadPackageFinder {
       function done () {
         if (_current === _count && _walkerDone) {
           const mods = dedupe(modules)
-          self.emitter.emit('verbose', `found the following requires`, mods)
+          self.emitter.emit('verbose', `found the following requires`, Array.from(mods))
           resolve(mods)
         }
       }
